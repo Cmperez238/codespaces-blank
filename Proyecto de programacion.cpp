@@ -1,6 +1,7 @@
 #include <iostream> 
 #include <vector>
 #include <sstream>
+#include <string>
 
 using namespace std;
 
@@ -13,7 +14,7 @@ struct tPolinomio
 int main () {
 
     int n, i, j {1};
-    string equt;
+    string equt, temp;
     stringstream ss;
     cout << "Introduzca la cantidad de polinomios a sumar: ";
     cin >> n;
@@ -25,12 +26,21 @@ int main () {
     do{
     cout << endl << "Polinomio " << j << " :";
     getline (cin, equt);
-    equt << ss;
+    ss << equt;
+    int num;    // Toma de equt los ints
+    ss >> num;
+    cout << num;
 
-    for (auto equt : ss)
-        cout << equt << endl;
 
+    for (auto temp : equt)
+        
+
+    
+    
     j++;
+
+
+    
     } while (j<=n);
 
     return 0;
