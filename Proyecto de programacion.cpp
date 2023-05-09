@@ -25,7 +25,6 @@ int main () {
     for (i=1; i<=n; i++)
         tPolinomio poli[i];
 
-    int m;
 
     do{
         cout << endl << "Polinomio " << j << " :";
@@ -55,23 +54,44 @@ int main () {
         string pol(vec.data(), vec.size()); //Este nuevo string no contiene un mas al inicio en caso de que contenga uno
         vec.clear();
 
-        do {  // Esta parte sigue inconclusa
-        ss << pol;
-        double num;
-        ss >> num;
+        
+        vector <char> comp;    // Vector de componentes de cada monomio
+        vector <string> mono;  // Vector donde se almacenan los monomios
+        p=0;       //Solo tiene un solo uso
 
-        int k{0};   // Lo que hace el entero es contar la posicion del ss, este va a viajar siempre entre doubles
-        k++;
-        if (k % 2 != 0)
+        for (auto C : pol)
         {
-            coef.push_back(num);
+            p++;
+            if (p==1)
+            {
+                comp.push_back(C);
+            }
+            else if (p!=1 and (C=='-' or C=='+'))
+            {
+                string mon(comp.data(), comp.size());                // En este else if se entrara solo si C es + ó -
+                mono.push_back(mon);                                 // Una vez adentro se creara un string de cada monomio y se almacenara en el vector mono
+                comp.clear();
+                comp.push_back(C);
+            }
+            else if (p==size(pol))
+            {
+                comp.push_back(C);
+                string mon(comp.data(), comp.size());
+                mono.push_back(mon);
+                comp.clear();
+            }
+            else
+            {
+                comp.push_back(C);
+            }
         }
 
-        } while () 
+        for (string m : mono)
+            cout << m << endl;
 
         
 
-    j++;
+        j++;
     } while (j<=n);
 
     return 0;
