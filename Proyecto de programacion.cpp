@@ -13,18 +13,19 @@ struct tPolinomio
 
 int main () {
 
-    int n, i, j {1};
+    int n, i, j {0};
     char C;
     string equt;
-    stringstream ss;
     vector <char> vec;
     cout << "Introduzca la cantidad de polinomios a sumar: ";
     cin >> n;
     cin.ignore();
 
+    vector <tPolinomio> polinomios;
+
     for (i=1; i<=n; i++)
     {
-        tPolinomio poli[i];
+        tPolinomio poli;
 
             cout << endl << "Polinomio " << i << " :";
             getline (cin, equt);
@@ -55,20 +56,16 @@ int main () {
 
             
             // Vector de componentes de cada monomio, se almacenara en vec
-            vector <string> mono;  // Vector donde se almacenan los monomios
+            vector <string> rawmono;  // Vector donde se almacenan los monomios
             p=0;       //Solo tiene un solo uso
 
             for (auto C : pol)
             {
                 p++;
-                if (p==1)  // Hay dos opciones o bien es un entero o es -
-                {
-                    vec.push_back(C);
-                }
-                else if (p!=1 and (C=='-' or C=='+'))
+                if (p!=1 and (C=='-' or C=='+'))
                 {
                     string mon(vec.data(), vec.size());                // En este else if se entrara solo si C es + ó -
-                    mono.push_back(mon);                                 // Una vez adentro se creara un string de cada monomio y se almacenara en el vector mono
+                    rawmono.push_back(mon);                                 // Una vez adentro se creara un string de cada monomio y se almacenara en el vector mono
                     vec.clear();
                     vec.push_back(C);
                 }
@@ -76,7 +73,7 @@ int main () {
                 {
                     vec.push_back(C);
                     string mon(vec.data(), vec.size());
-                    mono.push_back(mon);
+                    rawmono.push_back(mon);
                     vec.clear();
                 }
                 else
@@ -85,21 +82,43 @@ int main () {
                 }
             }
 
-            for (auto mon : mono)
-                ss << mon;
+            vector <string> mono;
+            string rmon;
+
+            for (auto rmon : rawmono)
+            {
+                int m=0;
+                for (auto C : rmon)
+                {
+                    m++;
+                    if (not(C=='+') and m!=size(rmon))
+                    {
+                        vec.push_back(C);
+                    }
+                    else if (m==size(rmon))
+                    {
+                        vec.push_back(C);
+                        string monomio(vec.data(), vec.size());
+                        vec.clear();
+                        mono.push_back(monomio);
+                    }
+                }
+            }
+
+        for (auto rmon : mono)   // He usado chat GPT porque el codigo que planteaba tenia un ligero problema respecto a la posicion de inicio de lectura del streamstring y contenido
+            {
+                stringstream ss;
+                ss << rmon;
                 double num;
                 ss >> num;
-                poli[i].coef.push_back(num);
-                
-            
+                poli.coef.push_back(num);
+            }
+                  
 
-                
-
-
-
-            
-
+        
     }
 
+    return 0;
+}
     return 0;
 }
