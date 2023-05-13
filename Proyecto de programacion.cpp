@@ -51,7 +51,6 @@ int main () {
             }
         }
         string rawpol(vec.data(), vec.size()); // Se crea un nuevo string sin espacios
-
         vec.clear(); // Se limpia el vector de caracteres para ser utilizado en el siguiente loop
 
         vector<string> rawmono; // Vector donde se almacenarán los monomios
@@ -144,7 +143,7 @@ int main () {
         }
 
 
-        //Finalmente definimos el grado de la funcion
+        //Finalmente definimos el grado del polinomio
         poli[i].grado=exponentes[i].expo.at(m-1);
         grados.push_back(poli[i].grado);
 
@@ -236,3 +235,4 @@ void burbuja(int *vec, int n) {
         }
     }
 }
+
