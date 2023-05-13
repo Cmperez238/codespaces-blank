@@ -111,19 +111,24 @@ int main () {
             }
         }
 
-        
-        for (auto salto : trash) {         // Itera sobre los elementos del vector trash
-            if (salto==nulo) {                  // Si el elemento es "cero"
-                j=0;
-                exponentes[i].expo.push_back(j); // Agrega 0 al vector de exponentes del polinomio i
-            }
-            else {
-                stringstream ss;
-                ss << salto;
-                int expon;
-                char t, s;
-                ss >> t >> s >> expon;          // Extrae el exponente del string "salto"
-                exponentes[i].expo.push_back(expon); // Agrega el exponente al vector de exponentes del polinomio i
+        if (trash.empty()) {  // Adicionado, corrige el error de la suma con 0
+            exponentes[i].expo.push_back(0);
+            poli[i].coef.push_back(0);
+        }
+        else if (not(trash.empty())) {
+            for (auto salto : trash) {         // Itera sobre los elementos del vector trash
+                if (salto==nulo) {                  // Si el elemento es "cero"
+                    j=0;
+                    exponentes[i].expo.push_back(j); // Agrega 0 al vector de exponentes del polinomio i
+                }
+                else {
+                    stringstream ss;
+                    ss << salto;
+                    int expon;
+                    char t, s;
+                    ss >> t >> s >> expon;          // Extrae el exponente del string "salto"
+                    exponentes[i].expo.push_back(expon); // Agrega el exponente al vector de exponentes del polinomio i
+                }
             }
         }
 
@@ -166,6 +171,7 @@ int main () {
         }
 
     } // Aqui finaliza el primer for
+
 
     //Ahora tenemos cada coeficiente dentro de vectores y cada grado, aplicamos el algoritmo de la burbuja para encontrar el mayor grado de los polinomios
     burbuja (&grados[0], n); //Llamamos a la funcion que ordena los exponentes de mayor a menor
