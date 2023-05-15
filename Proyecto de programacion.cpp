@@ -90,21 +90,21 @@ int main () {
         string rawpol(vec.data(), vec.size()); // Se crea un nuevo string sin espacios
         vec.clear(); // Se limpia el vector de caracteres para ser utilizado en el siguiente loop
 
-		for (j = 0; j < rawpol.size() - 1; j++) {
+		for (j = 0; j < rawpol.size() -1; j++) {
             if ((rawpol[j] == '+'  or rawpol[j] == '-' or rawpol[j] == var) and (rawpol[j+1] == '+' or rawpol[j+1] == '-' or rawpol[j+1] == var)) {
                 cout << "Error en el formato, ha ingresado dos elementos continuos" << endl;
                 goto Inicio;  // Sale del programa con un código de error
             }
         }
 
-        for (j = 0; j < rawpol.size() - 1; j++) {
+        for (j = 0; j < rawpol.size() -1; j++) {
             if (rawpol[j] == var and rawpol[j+1] == '-' ) {
                 cout << "Error, no se admiten exponentes negativos" << endl;
                 goto Inicio;  // Sale del programa con un código de error
             }
         }
 
-        for (j = 0; j < rawpol.size() - 1; j++) {
+        for (j = 0; j < rawpol.size() -1 ; j++) {
             if (rawpol[j] == '*' or rawpol[j+1] == var) {
                 if (rawpol[j] == '*' and rawpol[j+1] != var) {
                         cout << "Error en el formato, la forma correcta es *x" << endl;
@@ -113,23 +113,28 @@ int main () {
             }
         }
 
-        for (j = 0; j < rawpol.size() - 1; j++) {
+        for (j = 0; j < rawpol.size() -1 ; j++) {
             if (isdigit(rawpol[j]) and rawpol[j+1] == var) {
                 cout << "Error formato incorrecto" << endl;
                 goto Inicio;  // Sale del programa con un código de error
             }
         }
 
-        for (j = 0; j < rawpol.size() - 1; j++) {
-            if ((j == 0 and rawpol[j]== var) or (j == 0 and rawpol[j]=='*')) {
+         for (j = 0; j < rawpol.size(); j++) {
+            if ((j==0 and (isalpha(rawpol[j]))) or (j == 0 and rawpol[j]=='*')) {
                 cout << "Error, falta el coeficiente inicial" << endl;
                 goto Inicio;
-            } 
+            }  
             else if (!isdigit(rawpol[j]) and rawpol[j+1] == '*') {
                 cout << "Error, falta el coeficiente antes de *" << endl;
                 goto Inicio;
             }
         }
+        for (j = 1; j < rawpol.size() ; j++) {
+            if (isdigit(rawpol[j]) and rawpol[j-1] == var and isdigit(rawpol[j+1]) ) {
+                cout << "Error en el polinomio" << endl;
+                goto Inicio;}
+		}
 
         vector<string> rawmono; // Vector donde se almacenarán los monomios
         int j = 0;
