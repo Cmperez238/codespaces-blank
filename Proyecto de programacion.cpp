@@ -22,28 +22,65 @@ struct tExponentes
 
 void burbuja(int* vec, int n);
 
+
 int main () {
 
     int n, i, j;
-    char C;
-    string equt;
+    char C, var{}, var2{};
+    string equt, entrada;
     vector <char> vec;
-    cout << "Introduzca la cantidad de polinomios a sumar: ";
-    cin >> n;
-    cin.ignore();
+    bool entrada_valida = false;
 
+    cout<<"Suma de polinomios \nEl polinomio ingresado debe ser de la forma a*xn+b*xn-1+..+c*x1+d"<<endl;
+    while (!entrada_valida){
+    	cout << "Introduzca la cantidad de polinomios a sumar: ";
+    	getline(cin, entrada);
+    	try{
+            size_t pos;
+            n = stoi(entrada, &pos);
+            if (pos < entrada.size()) {
+                throw invalid_argument("La entrada no es un numero entero valido. Intente de nuevo.");
+            }
+            if (n <= 0) {
+                throw out_of_range("El numero debe ser positivo.");
+            }
+            entrada_valida = true;
+        }
+        catch(const invalid_argument& e){
+            cout << "Intente de nuevo" <<endl;
+        }
+        catch(const out_of_range& e){
+            cout << e.what() << " Intente de nuevo." <<endl;
+        }
+    }
+    
     vector <tPolinomio> poli(n);
     vector <tExponentes> exponentes(n);
     vector <int> grados;
 
     for (i=0; i<n; i++)
     {
+        Inicio:
+
         poli[i].coef;
         poli[i].grado = 0;
 
-        cout << endl << "Polinomio " << i+1 << " :";
-        getline(cin, equt);
-
+    	cout << endl << "Polinomio " << i+1 << " :";
+    	getline (cin, equt);
+    
+        for (auto v=1; v<=equt.length(); v++){ //isalpha fue descubierta con chatgpt, su funcion es buscar caracteres en un string
+            	if(isalpha(equt[v])){  
+            		var2=equt[v];
+            		if(var==0){
+            			var=equt[v];
+            		}
+				}
+			}
+			if(var!=var2){
+				cout<<"Error. Polinomio contiene mas de una variable"<<endl;
+				getline (cin, equt);
+			}
+		
         vector<char> vec; // Vector de caracteres utilizado para ignorar espacios
         for (auto C : equt) {
             if (not (isspace(C))) {
@@ -51,8 +88,56 @@ int main () {
             }
         }
         string rawpol(vec.data(), vec.size()); // Se crea un nuevo string sin espacios
-        vec.clear(); // Se limpia el vector de caracteres para ser utilizado en el siguiente loop
+        vec.clear(); // Se limpia el vector de caracteres para ser utilizado en el siguiente loop	
+		
+		for (j = 0; j < rawpol.size() - 1; j++) {
+            if ((rawpol[j] == '+'  or rawpol[j] == '-') and (rawpol[j+1] == '+' or rawpol[j+1] == '-')) {
+                cout << "Error en el formato, ha ingresado dos signos continuos" << endl;
+                goto Inicio;  // Sale del programa con un código de error
+            }
+        }
+        
+        for (j = 0; j < rawpol.size() - 1; j++) {
+            if (rawpol[j] == var and rawpol[j+1] == var) {
+                cout << "Error en el formato, ha ingresado dos variables continuas" << endl;
+                goto Inicio;  // Sale del programa con un código de error
+            }
+        }
 
+        for (j = 0; j < rawpol.size() - 1; j++) {
+            if (rawpol[j] == var and rawpol[j+1] == '-' ) {
+                cout << "Error, no se admiten exponentes negativos" << endl;
+                goto Inicio;  // Sale del programa con un código de error
+            }
+        }
+
+        for (j = 0; j < rawpol.size() - 1; j++) {
+            if (rawpol[j] == '*' or rawpol[j+1] == var) {
+                if (rawpol[j] == '*' and rawpol[j+1] != var) {
+                        cout << "Error en el formato, la forma correcta es *x" << endl;
+                        goto Inicio;  // Sale del programa con un código de error
+                }
+            }
+        }
+
+        for (j = 0; j < rawpol.size() - 1; j++) {
+            if (isdigit(rawpol[j])  and rawpol[j+1] == var ) {
+                cout << "Error formato incorrecto" << endl;
+                goto Inicio;  // Sale del programa con un código de error
+            }
+        }
+
+        for (j = 0; j < rawpol.size() - 1; j++) {
+        	if(j==0 and rawpol[j] == var){
+        		cout<<"Error falta el coeficiente";
+                goto Inicio;
+			}
+            else if (not(isdigit(rawpol[j])) and rawpol[j+1] == '*' ){
+                cout << "Error en los coeficientes" << endl;
+                goto Inicio;  // Sale del programa con un código de error
+            }
+        }
+		
         vector<string> rawmono; // Vector donde se almacenarán los monomios
         int j = 0;
         for (auto C : rawpol) {
@@ -81,10 +166,10 @@ int main () {
             j=0;
             for (auto C : rmon) { // Se itera sobre cada caracter del monomio actual
                 j++;
-                if (not(C=='+') and j!=size(rmon)) { // Si el caracter actual no es '+' y no es el ultimo caracter del monomio, se agrega al vector vec
+                if (not(C=='+') and j!=rmon.size()) { // Si el caracter actual no es '+' y no es el ultimo caracter del monomio, se agrega al vector vec
                     vec.push_back(C);
                 }
-                else if (j==size(rmon)) { // Si el caracter actual es el ultimo caracter del monomio, se agrega al vector vec y se crea un string monomio con vec
+                else if (j==rmon.size()) { // Si el caracter actual es el ultimo caracter del monomio, se agrega al vector vec y se crea un string monomio con vec
                     vec.push_back(C);
                     string monomio(vec.data(), vec.size()); // Se crea un string con los caracteres del vector vec
                     vec.clear(); // Se limpia el vector vec
@@ -92,17 +177,19 @@ int main () {
                 }
             }
         }
-
+			
+			
+			
         vector <string> trash; // Se crea un vector de strings para almacenar elementos no deseados
         string nulo = "cero"; // Se crea un string con el valor "cero"
 
         for (auto rmon : mono) { // Se itera sobre cada elemento del vector mono
             stringstream ss;
             ss << rmon; // Se guarda el monomio actual en un stringstream
-            double num; // Variable temporal para almacenar el coeficiente del monomio actual
+            double num{}; // Variable temporal para almacenar el coeficiente del monomio actual
             string salto; // Variable temporal para almacenar el resto del monomio actual
             ss >> num >> salto; // Se extrae el coeficiente y el resto del monomio actual
-            if(num!=0){ // Si el coeficiente no es cero
+		    if(num!=0){ // Si el coeficiente no es cero
                 poli[i].coef.push_back(num); // Se agrega el coeficiente al vector de coeficientes del polinomio i-esimo
                 if (salto.empty()) // Si el resto del monomio es vacío
                     trash.push_back(nulo); // Se agrega "cero" al vector trash
@@ -125,9 +212,15 @@ int main () {
                     stringstream ss;
                     ss << salto;
                     int expon;
-                    char t, s;
+                    char t{'*'}, s=var;
                     ss >> t >> s >> expon;          // Extrae el exponente del string "salto"
-                    exponentes[i].expo.push_back(expon); // Agrega el exponente al vector de exponentes del polinomio i
+                    if (t!='*' and s!=var) {
+                        cout << "Error en el formato";
+                        goto Inicio;
+                    }
+                    else {
+                        exponentes[i].expo.push_back(expon); // Agrega el exponente al vector de exponentes del polinomio i
+                    }
                 }
             }
         }
@@ -214,11 +307,11 @@ int main () {
     i=0;
     for (auto temp2 : coeffinal) {       //Itera sobre cada coeficiente en coeffinal
         if(i!=0 and temp2>0) {           //Si el exponente no es cero y el coeficiente es positivo
-            cout << " + " << temp2 << "*x" << i ;
+            cout << " + " << temp2 <<"*"<< var << i ;
         }
         else if(i!=0 and temp2<0) {      //Si el exponente no es cero y el coeficiente es negativo
             temp2 = (-1*temp2);
-            cout << " - "<< temp2 << "*x" << i;
+            cout << " - "<< temp2 <<"*"<< var << i;
         } 
         else if (i==0)                  //Si el exponente es cero
             cout << temp2;
@@ -241,4 +334,5 @@ void burbuja(int *vec, int n) {
         }
     }
 }
+
 
