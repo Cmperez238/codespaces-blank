@@ -91,15 +91,8 @@ int main () {
         vec.clear(); // Se limpia el vector de caracteres para ser utilizado en el siguiente loop
 
 		for (j = 0; j < rawpol.size() - 1; j++) {
-            if ((rawpol[j] == '+'  or rawpol[j] == '-') and (rawpol[j+1] == '+' or rawpol[j+1] == '-')) {
-                cout << "Error en el formato, ha ingresado dos signos continuos" << endl;
-                goto Inicio;  // Sale del programa con un código de error
-            }
-        }
-        
-        for (j = 0; j < rawpol.size() - 1; j++) {
-            if (rawpol[j] == var and rawpol[j+1] == var) {
-                cout << "Error en el formato, ha ingresado dos variables continuas" << endl;
+            if ((rawpol[j] == '+'  or rawpol[j] == '-' or rawpol[j] == var) and (rawpol[j+1] == '+' or rawpol[j+1] == '-' or rawpol[j+1] == var)) {
+                cout << "Error en el formato, ha ingresado dos elementos continuos" << endl;
                 goto Inicio;  // Sale del programa con un código de error
             }
         }
@@ -334,4 +327,3 @@ void burbuja(int *vec, int n) {
         }
     }
 }
-
