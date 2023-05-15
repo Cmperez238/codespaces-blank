@@ -80,7 +80,7 @@ int main () {
 				cout<<"Error. Polinomio contiene mas de una variable"<<endl;
 				getline (cin, equt);
 			}
-		
+
         vector<char> vec; // Vector de caracteres utilizado para ignorar espacios
         for (auto C : equt) {
             if (not (isspace(C))) {
@@ -88,8 +88,8 @@ int main () {
             }
         }
         string rawpol(vec.data(), vec.size()); // Se crea un nuevo string sin espacios
-        vec.clear(); // Se limpia el vector de caracteres para ser utilizado en el siguiente loop	
-		
+        vec.clear(); // Se limpia el vector de caracteres para ser utilizado en el siguiente loop
+
 		for (j = 0; j < rawpol.size() - 1; j++) {
             if ((rawpol[j] == '+'  or rawpol[j] == '-') and (rawpol[j+1] == '+' or rawpol[j+1] == '-')) {
                 cout << "Error en el formato, ha ingresado dos signos continuos" << endl;
@@ -121,23 +121,23 @@ int main () {
         }
 
         for (j = 0; j < rawpol.size() - 1; j++) {
-            if (isdigit(rawpol[j])  and rawpol[j+1] == var ) {
+            if (isdigit(rawpol[j]) and rawpol[j+1] == var) {
                 cout << "Error formato incorrecto" << endl;
                 goto Inicio;  // Sale del programa con un código de error
             }
         }
 
         for (j = 0; j < rawpol.size() - 1; j++) {
-        	if(j==0 and rawpol[j] == var){
-        		cout<<"Error falta el coeficiente";
+            if ((j == 0 and rawpol[j]== var) or (j == 0 and rawpol[j]=='*')) {
+                cout << "Error, falta el coeficiente inicial" << endl;
                 goto Inicio;
-			}
-            else if (not(isdigit(rawpol[j])) and rawpol[j+1] == '*' ){
-                cout << "Error en los coeficientes" << endl;
-                goto Inicio;  // Sale del programa con un código de error
+            } 
+            else if (!isdigit(rawpol[j]) and rawpol[j+1] == '*') {
+                cout << "Error, falta el coeficiente antes de *" << endl;
+                goto Inicio;
             }
         }
-		
+
         vector<string> rawmono; // Vector donde se almacenarán los monomios
         int j = 0;
         for (auto C : rawpol) {
@@ -334,5 +334,4 @@ void burbuja(int *vec, int n) {
         }
     }
 }
-
 
