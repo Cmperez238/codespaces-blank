@@ -131,7 +131,7 @@ int main () {
             }
         }
         for (j = 1; j < rawpol.size() ; j++) {
-            if (isdigit(rawpol[j]) and rawpol[j-1] == var and isdigit(rawpol[j+1]) ) {
+            if (isdigit(rawpol[j]) and rawpol[j-1] == var and isdigit(rawpol[j+1]) and rawpol[j+2] == '*' ) {
                 cout << "Error en el polinomio" << endl;
                 goto Inicio;}
 		}
